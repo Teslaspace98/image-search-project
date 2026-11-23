@@ -1,5 +1,6 @@
 import streamlit as st
 from search import search
+from db import log_search, get_recent_searches
 
 st.title("Image Search 🔍")
 
@@ -10,6 +11,7 @@ if uploaded:
         f.write(uploaded.getbuffer())
 
     results = search("query.jpg")
+    log_search("query.jpg", results)
 
     st.image("query.jpg", caption="Query Image")
 
@@ -17,3 +19,7 @@ if uploaded:
 
     for img in results:
         st.image(img)
+
+st.sidebar.header("Recent Searches")
+for query_image, timestamp in get_recent_searches():
+    st.sidebar.write(f"{query_image} — {timestamp}")
